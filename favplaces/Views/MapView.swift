@@ -18,7 +18,7 @@ struct MapView: View {
                         Image(systemName: "star.circle")
                             .resizable()
                             .foregroundStyle(.blue)
-                            .frame(width: 44, height: 44)
+                            .frame(width: 50, height: 50)
                             .background(.white)
                             .clipShape(Circle())
                             .onLongPressGesture(minimumDuration: 0.2) {
