@@ -17,7 +17,8 @@ struct EditView: View {
             Form {
                 Section {
                     TextField("Place Name", text: $name)
-                    TextField("Description", text: $description)
+                    TextEditor(text: $description)
+                        .frame(height: 100)
                 }
             }
             .navigationTitle("Favorite Place Details")
