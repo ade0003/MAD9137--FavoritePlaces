@@ -32,3 +32,5 @@ FavoritePlaces/
 - iOS 17.0+
 - Xcode 15.0+
 - Swift 5.9+
+
+N.B: the keyboard mechanism might be a little slow/buggy on first launch, i've scoured the internet for a solution with no success.
