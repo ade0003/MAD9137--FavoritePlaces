@@ -22,12 +22,13 @@ struct MapView: View {
                         Image(systemName: "star.circle")
                             .resizable()
                             .foregroundStyle(.blue)
-                            .frame(width: 50, height: 50)
+                            .frame(width: 40, height: 40)
                             .background(.white)
                             .clipShape(Circle())
                             .onLongPressGesture(minimumDuration: 0.2) {
                                 onLocationTap(location)
                             }
+                            .allowsHitTesting(true)
                     }
                 }
             }
