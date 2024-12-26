@@ -33,4 +33,4 @@ FavoritePlaces/
 - Xcode 15.0+
 - Swift 5.9+
 
-N.B: the keyboard mechanism might be a little slow/buggy on first launch, i've scoured the internet for a solution with no success.
+N.B: app might be a little slow/buggy on first launch, i've scoured the internet for a solution with no success. subsequent launches are smooth. For best performance, I'd recommend launching the app, closing and then opening it from your mobile device
