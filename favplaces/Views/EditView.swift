@@ -11,6 +11,8 @@ struct EditView: View {
     var onSave: (Location) -> Void
 
     var body: some View {
+        // this creates a form for editing
+
         NavigationStack {
             Form {
                 Section {
@@ -33,6 +35,8 @@ struct EditView: View {
         }
     }
 
+    // this initializes the view with current values
+
     init(location: Location, onSave: @escaping (Location) -> Void) {
         self.location = location
         self.onSave = onSave
@@ -40,8 +44,4 @@ struct EditView: View {
         _name = State(initialValue: location.name)
         _description = State(initialValue: location.description)
     }
-}
-
-#Preview {
-    EditView(location: .example) { _ in }
 }

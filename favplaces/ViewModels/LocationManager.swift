@@ -8,9 +8,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var userLocation: CLLocation?
     @Published var region: MapCameraPosition?
     @Published var locationStatus: CLAuthorizationStatus?
-    
+
     private let locationManager = CLLocationManager()
     private var locationTimeout: Timer?
+
+    // this sets up the location manager when created
 
     override init() {
         super.init()
@@ -18,13 +20,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationStatus = locationManager.authorizationStatus
     }
-    
+
+    // this requests a location update with timeout
+
     func requestLocation() {
         locationTimeout?.invalidate()
-        
+
         if locationStatus == .authorizedWhenInUse || locationStatus == .authorizedAlways {
             locationManager.requestLocation()
-            
+
             locationTimeout = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { [weak self] _ in
                 self?.handleLocationTimeout()
             }
@@ -32,20 +36,22 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
             locationManager.requestWhenInUseAuthorization()
         }
     }
-    
+
     private func handleLocationTimeout() {
         print("Location request timed out")
         if let lastLocation = userLocation {
             updateRegion(with: lastLocation)
         }
     }
-    
+
+    // this updates the map region with an  animation
+
     private func updateRegion(with location: CLLocation) {
         DispatchQueue.main.async {
             withAnimation(.easeInOut(duration: 0.8)) {
                 let currentSpan = (self.region?.region as? MKCoordinateRegion)?.span ??
                     MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
-                
+
                 self.region = MapCameraPosition.region(MKCoordinateRegion(
                     center: location.coordinate,
                     span: currentSpan
@@ -54,9 +60,11 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
+    // these handle location manager delegate callbacks
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         locationStatus = manager.authorizationStatus
-        
+
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.requestLocation()

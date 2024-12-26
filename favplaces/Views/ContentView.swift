@@ -5,6 +5,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var locationManager = LocationManager()
     @State private var viewModel = LocationViewModel()
+    // this is the main view of the app
 
     var body: some View {
         NavigationStack {
@@ -12,6 +13,8 @@ struct ContentView: View {
                 if locationManager.locationStatus == .denied || locationManager.locationStatus == .restricted {
                     Text("Location access is denied. Please enable it in settings.")
                 } else {
+                    // this displays the map with locations
+
                     MapView(
                         region: .constant(locationManager.region ?? .automatic),
                         locations: viewModel.locations,
@@ -57,11 +60,15 @@ struct ContentView: View {
                     .tint(.blue)
                 }
             }
+            // this shows the edit sheet when a place is selected
+
             .sheet(item: $viewModel.selectedPlace) { place in
                 EditView(location: place) { updatedLocation in
                     viewModel.updateLocation(location: updatedLocation)
                 }
             }
+            // this requests location when view appears
+
             .onAppear {
                 locationManager.requestLocation()
             }

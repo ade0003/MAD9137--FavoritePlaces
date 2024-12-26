@@ -3,6 +3,8 @@
 import MapKit
 import SwiftUI
 
+// this displays the map and handles map interactions
+
 struct MapView: View {
     @Binding var region: MapCameraPosition?
     let locations: [Location]
@@ -13,6 +15,8 @@ struct MapView: View {
         MapReader { proxy in
             Map(position: .constant(region ?? .automatic)) {
                 UserAnnotation()
+                // this creates markers for each location
+
                 ForEach(locations) { location in
                     Annotation(location.name, coordinate: location.coordinate) {
                         Image(systemName: "star.circle")
@@ -27,6 +31,8 @@ struct MapView: View {
                     }
                 }
             }
+            // this handles taps on the map
+
             .onTapGesture { position in
                 if let coordinate = proxy.convert(position, from: .local) {
                     onMapTap(coordinate)
