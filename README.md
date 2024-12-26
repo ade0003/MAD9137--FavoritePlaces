@@ -14,7 +14,7 @@ An iOS app that lets users save and manage their favorite locations on a map. Us
 
 1. Clone the repository
 2. Open favPlaces.xcodeproj in Xcode
-3. Ensure you have iOS 17.0+ selected as your minimum deployment target
+3. Ensure you have iOS 17.6+ selected as your minimum deployment target
 4. Run the app on a real device, using simulator will cause issues with GPS
 
 ## Project Structure
@@ -29,7 +29,7 @@ FavoritePlaces/
 
 ## Requirements
 
-- iOS 17.0+
+- iOS 17.6+
 - Xcode 15.0+
 - Swift 5.9+
 
