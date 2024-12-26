@@ -1,9 +1,3 @@
-//
-//  favplacesApp.swift
-//  favplaces
-//
-//  Created by Goodness Ade on 2024-12-26.
-//
 
 import SwiftUI
 
