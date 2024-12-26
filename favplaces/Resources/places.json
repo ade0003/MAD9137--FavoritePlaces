@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "name": "Central Park",
+        "latitude": 40.785091,
+        "longitude": -73.968285,
+        "description": "A large park in New York City."
+    },
+    {
+        "id": "2",
+        "name": "Eiffel Tower",
+        "latitude": 48.858844,
+        "longitude": 2.294351,
+        "description": "A famous landmark in Paris, France."
+    },
+    {
+        "id": "3",
+        "name": "Sydney Opera House",
+        "latitude": -33.856784,
+        "longitude": 151.215297,
+        "description": "An iconic performing arts center in Sydney, Australia."
+    }
+]
