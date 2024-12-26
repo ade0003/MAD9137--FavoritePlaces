@@ -4,6 +4,7 @@ import Foundation
 import MapKit
 import SwiftUI
 
+// this handles all location-related services and permissions
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var userLocation: CLLocation?
     @Published var region: MapCameraPosition?
@@ -12,8 +13,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
     private var locationTimeout: Timer?
 
-    // this sets up the location manager when created
-
     override init() {
         super.init()
         locationManager.delegate = self
@@ -21,30 +20,30 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationStatus = locationManager.authorizationStatus
     }
 
-    // this requests a location update with timeout
-
+    // this requests continuous location updates with a timeout
     func requestLocation() {
         locationTimeout?.invalidate()
 
         if locationStatus == .authorizedWhenInUse || locationStatus == .authorizedAlways {
-            locationManager.requestLocation()
+            locationManager.startUpdatingLocation() // use continuous updates
 
-            locationTimeout = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { [weak self] _ in
+            // this creates a 2-second timeout
+            locationTimeout = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
                 self?.handleLocationTimeout()
+                self?.locationManager.stopUpdatingLocation() // stop updates after timeout
             }
         } else {
             locationManager.requestWhenInUseAuthorization()
         }
     }
 
+    // this handles when location request times out
     private func handleLocationTimeout() {
-        print("Location request timed out")
+        print("location request timed out")
         if let lastLocation = userLocation {
             updateRegion(with: lastLocation)
         }
     }
-
-    // this updates the map region with an  animation
 
     private func updateRegion(with location: CLLocation) {
         DispatchQueue.main.async {
@@ -60,16 +59,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
-    // these handle location manager delegate callbacks
-
+    // this handles changes in location authorization
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         locationStatus = manager.authorizationStatus
 
         switch manager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
-            locationManager.requestLocation()
+            locationManager.startUpdatingLocation() // used continuous updates here
         case .denied, .restricted:
-            print("Location access denied or restricted")
+            print("location access denied or restricted")
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         @unknown default:
@@ -77,17 +75,21 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
+    // this processes received location updates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         userLocation = location
         updateRegion(with: location)
         locationTimeout?.invalidate()
+        locationManager.stopUpdatingLocation() // stop updates after successful location
     }
 
+    // this handles location errors gracefully
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Location error: \(error.localizedDescription)")
+        print("location error: \(error.localizedDescription)")
         if let lastLocation = userLocation {
             updateRegion(with: lastLocation)
         }
+        locationManager.stopUpdatingLocation() // stop updates on error
     }
 }
